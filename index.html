@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/3aa7fc8710.js" crossorigin="anonymous"></script>
+    <title>Dashboard</title>
+</head>
+
+<body onload="initClock()">
+    <div id="containers">
+        <div class="box datetime">
+            <div class="date">
+                <span id="dayname">Day</span>
+                <span id="month">Month</span>
+                <span id="daynum">00</span>
+                <span id="year">Year</span>
+            </div>
+            <div class="time">
+                <span id="hour">00</span>:
+                <span id="minutes">00</span>:
+                <span id="seconds">00</span>
+                <span id="period">AM</span>
+            </div>
+        </div>
+    
+        <div class="box quote-box">
+            <h2>Quote of the day</h2>
+            <blockquote id="quote">Loading...</blockquote>
+            <span id="author">Loading...</span>
+        </div>
+
+        
+        <div class="box music-player">
+            <nav>
+                <div class="circle">
+                    <i class="fa-solid fa-angle-left"></i>
+                </div>
+                <div class="circle">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </nav>
+            <img src="media/thumbnail.webp" class="song-img">
+            <h1>Lazy Day - Stylish Futuristic Chill</h1>
+            <p>penguin music</p>
+
+            <audio id="song">
+                <source src="media/lazy-day-stylish-futuristic-chill-239287.mp3" type="audio/mpeg">
+            </audio>
+            <input type="range" value="0" id="progress">
+
+            <div class="controls">
+                <div><i class="fa-solid fa-backward"></i></div>
+                <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+                <div><i class="fa-solid fa-forward"></i></div>
+            </div>
+
+        </div>
+
+        <div class="box todo-app">
+            <h2>To-Do List</h2>
+            <div class="row">
+                <input type="text" id="input-box" placeholder="Add your Text">
+                <button onclick="addTask()">Add</button>
+            </div>
+            <ul id="list-container">
+                <!-- <li class="checked">Task 1</li>
+                <li>Task 2</li>
+                <li>Task 3</li> -->
+            </ul>
+        </div>
+        
+        <div class="box notes">
+            <h1>Notes</h1>
+            <button class="btn">Create Notes</button>
+            <div class="notes-container">
+                <!-- <p contenteditable="true" class="input-box">
+                    <img src="images/delete.png"></img>
+                </p> -->
+            </div>
+        </div>
+        <div class="footer">
+            <p>Dashboard Version 1.0</p>
+        </div>
+    </div>
+
+
+    
+
+    <script type="text/javascript">
+        function updateClock(){
+            var now = new Date();
+            var dname = now.getDay(),
+                mo = now.getMonth(),
+                dnum = now.getDate(),
+                yr = now.getFullYear(),
+                hou = now.getHours(),
+                min = now.getMinutes(),
+                sec = now.getSeconds(),
+                pe = "AM";
+
+                if(hou == 0){
+                    hou = 12;
+                }
+                if(hou > 12){
+                    hou = hou - 12;
+                    pe = "PM";
+                }
+
+                var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                var week = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                var ids = ["dayname", "month", "daynum", "year", "hour", "minutes", "seconds", "period"];
+                var values = [week[dname], months[mo], dnum, yr, String(hou).padStart(2, '0'), String(min).padStart(2, '0'), String(sec).padStart(2, '0'), pe];
+                for(var i = 0; i < ids.length; i++)
+                document.getElementById(ids[i]).firstChild.nodeValue = values[i];
+        }
+
+        function initClock(){
+            updateClock();
+            window.setInterval("updateClock()", 1);
+        }
+    </script>
+    
+
+    <script>
+        const quote = document.getElementById("quote");
+        const author = document.getElementById("author");
+        
+        function getApiUrl() {
+            return `https://api.allorigins.win/get?url=https://zenquotes.io/api/random&rand=${Math.random()}`;
+        }
+
+        async function getquote(url) {
+            const api_url = getApiUrl();
+            try {
+                const response = await fetch(api_url);
+                const data = await response.json();
+
+                console.log("Raw data from API:", data);
+
+                const parsedData = JSON.parse(data.contents);  // Parse the result
+
+                console.log("Parsed data:", parsedData);
+
+                quote.innerHTML = parsedData[0].q;  // Updated to match ZenQuotes API format
+                author.innerHTML = parsedData[0].a; // Updated to match ZenQuotes API format
+            } catch (error) {
+                quote.innerHTML = "Failed to fetch quote.";
+                author.innerHTML = "";
+                console.error("Error fetching the quote:", error);
+            }
+        }
+
+
+        getquote();
+
+        document.getElementById("new-quote-btn").addEventListener("click", function() {
+            getquote();
+        });
+
+        function tweet(){
+            window.open("https://twitter.com/intent/tweet?text=" + quote.innerHTML + "%0A---- by " + author.innerHTML, "Tweet Window", "width=600, height=300");
+        }
+
+
+    </script>
+
+    <script>
+        let progress = document.getElementById("progress");
+        let song = document.getElementById("song");
+        let ctrlIcon = document.getElementById("ctrlIcon");
+
+        song.onloadedmetadata = function(){
+            progress.max = song.duration;
+            progress.value = song.currentTime;
+        }
+
+        function playPause(){
+            if(ctrlIcon.classList.contains("fa-pause")){
+                song.pause();
+                ctrlIcon.classList.remove("fa-pause");
+                ctrlIcon.classList.add("fa-play");
+            }
+            else{
+                song.play();
+                ctrlIcon.classList.add("fa-pause");
+                ctrlIcon.classList.remove("fa-play");
+            }
+        }
+
+        song.addEventListener('timeupdate', () => {
+            progress.value = song.currentTime;
+        });
+
+        progress.onchange = function(){
+            song.play();
+            song.currentTime = progress.value; 
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+
+    </script>
+    <script src="script.js"></script>
+    
+</body>
+</html>
