@@ -70,7 +70,8 @@ body{
 .quote-box{
     position: absolute;
     background: transparent;
-    width: 420px;
+    justify-content: center;
+    width: 550px;
     height: 350px;
     border: 3px solid #b3bd79;
     color: #fff;
@@ -129,7 +130,7 @@ body{
 /* music app  */
 .music-player{
     position: absolute;
-    top: 10px;
+    top: 0px;
     right: 10px;
     background: transparent;
     width: 400px;
@@ -229,13 +230,12 @@ nav .circle{
 
 .todo-app{
     width: 100%;
-    margin-top: 0;
+    margin-top: 20px;
     max-width: 540px;
     background: transparent;
     padding: 40px 30px 70px;
     border-radius: 10px;
     position: absolute;
-    top:10px;
     left: 33%;
     border: 3px solid #b3bd79;
     transition: 1.0s;
