@@ -10,3 +10,8 @@ Change logs--------------------
         Digital Clock, Notes, To-do list, Quote of the Day and the Music App feature, all displayed in a single screen. 
 
         More updates coming soon. 
+
+9/21/24 Dashboard v.1.0.1 released.
+
+        Few minor UI changes
+
